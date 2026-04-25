@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Surprise for Israa ⏳✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, #fff0f6 0%, #fcc2d7 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        /* شاشة العداد التنازلي */
+        #countdown-screen {
+            text-align: center;
+            z-index: 300;
+            padding: 20px;
+        }
+
+        .timer-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .time-box {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 12px;
+            border-radius: 12px;
+            min-width: 55px;
+            box-shadow: 0 5px 15px rgba(214, 51, 108, 0.1);
+        }
+
+        .time-num { font-size: 1.3rem; font-weight: 600; color: #d6336c; display: block; }
+        .time-label { font-size: 0.6rem; text-transform: uppercase; color: #862e9c; }
+
+        /* الهدية والرسائل */
+        #gift-section { display: none; position: absolute; cursor: pointer; transition: all 0.3s ease; z-index: 100; }
+        .gift-box { font-size: 80px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); }
+        
+        #celebration { display: none; text-align: center; padding: 20px; animation: popIn 1s ease-out; }
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
+
+        .main-title { color: #d6336c; font-size: 2.2rem; margin: 10px 0; }
+        .sub-text { color: #862e9c; font-size: 1.2rem; }
+
+        #hint-bar {
+            display: none; position: fixed; top: 40px; background: rgba(255, 255, 255, 0.8);
+            padding: 10px 25px; border-radius: 30px; color: #d6336c; font-weight: bold; z-index: 200;
+        }
+
+        .particle { position: absolute; pointer-events: none; animation: floatUp 4s linear forwards; }
+        @keyframes floatUp { 0% { transform: translateY(110vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div id="countdown-screen">
+        <h2 style="color: #d6336c;">A special surprise is waiting... ✨</h2>
+        <div class="timer-container">
+            <div class="time-box"><span class="time-num" id="days">00</span><span class="time-label">Days</span></div>
+            <div class="time-box"><span class="time-num" id="hours">00</span><span class="time-label">Hrs</span></div>
+            <div class="time-box"><span class="time-num" id="minutes">00</span><span class="time-label">Min</span></div>
+            <div class="time-box"><span class="time-num" id="seconds">00</span><span class="time-label">Sec</span></div>
+        </div>
+        <p style="color: #862e9c; margin-top: 25px; font-weight: bold;">Wait for it, Israa! 🌸</p>
+    </div>
+
+    <div id="hint-bar">Tap the gift! 🎁</div>
+
+    <div class="gift-container" id="gift-section" onclick="handleInteraction()">
+        <div class="gift-box" id="actual-gift">🎁</div>
+    </div>
+
+    <div id="celebration">
+        <div style="font-size: 80px;">🌸</div>
+        <h1 class="main-title">Happy Birthday, Israa! 🎉</h1>
+        <p class="sub-text">Wishing you a wonderful year ahead.</p>
+        <p style="color: #495057;">May your day be filled with joy and success! ✨</p>
+        <div style="font-size: 40px; margin-top: 20px;">🎂🎈⭐</div>
+    </div>
+
+    <script>
+        // ضبط التاريخ: 29 أفريل 2026
+        const birthdayDate = new Date(2026, 3, 29, 0, 0, 0).getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = birthdayDate - now;
+
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = d;
+            document.getElementById("hours").innerText = h;
+            document.getElementById("minutes").innerText = m;
+            document.getElementById("seconds").innerText = s;
+
+            // عند انتهاء العداد
+            if (distance < 0) {
+                clearInterval(timer);
+                startEvent();
+            }
+        }, 1000);
+
+        function startEvent() {
+            document.getElementById("countdown-screen").style.display = "none";
+            document.getElementById("gift-section").style.display = "block";
+            document.getElementById("hint-bar").style.display = "block";
+            centerGift();
+        }
+
+        let touchCount = 0;
+        const maxTouches = 5;
+
+        function handleInteraction() {
+            const gift = document.getElementById('gift-section');
+            if (touchCount < maxTouches) {
+                const p = 80;
+                const newX = Math.random() * (window.innerWidth - p * 2) + p;
+                const newY = Math.random() * (window.innerHeight - p * 2) + p;
+                
+                gift.style.left = (newX - 40) + 'px';
+                gift.style.top = (newY - 40) + 'px';
+                gift.style.transform = "none";
+                touchCount++;
+
+                if (touchCount === maxTouches) {
+                    document.getElementById('hint-bar').innerText = "Okay! Open your gift, Israa! ✨";
+                    gift.style.left = "50%"; gift.style.top = "50%";
+                    gift.style.transform = "translate(-50%, -50%)";
+                }
+            } else {
+                openSurprise();
+            }
+        }
+
+        function openSurprise() {
+            document.getElementById('gift-section').style.display = 'none';
+            document.getElementById('hint-bar').style.display = 'none';
+            document.getElementById('celebration').style.display = 'block';
+            setInterval(createParticle, 150);
+        }
+
+        function createParticle() {
+            const symbols = ['🌸', '✨', '🎈', '⭐'];
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            p.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 4000);
+        }
+
+        function centerGift() {
+            const g = document.getElementById('gift-section');
+            g.style.left = "50%"; g.style.top = "50%";
+            g.style.transform = "translate(-50%, -50%)";
+        }
+    </script>
+</body>
+</html>
