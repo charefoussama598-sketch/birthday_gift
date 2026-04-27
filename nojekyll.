@@ -1,1 +1,154 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Gift for Israa</title>
+    <style>
+        /* إعدادات الهاتف لمنع التكبير والتهنيج */
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; touch-action: none; }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle, #fff0f6 0%, #fcc2d7 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #giftWrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+        }
+
+        .gift-box {
+            width: 100%;
+            height: 100%;
+            background: #ff4d6d;
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        /* شريط الهدية */
+        .gift-box::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 100%;
+            background: #c9184a;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .lid {
+            width: 130px;
+            height: 30px;
+            background: #ff758f;
+            position: absolute;
+            top: -15px;
+            left: -5px;
+            z-index: 11;
+            border-radius: 5px;
+            transition: all 0.5s ease;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        /* الكارط اللي تخرج لـ إسراء */
+        .card {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            width: 240px;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            color: #ff4d6d;
+            z-index: 1;
+        }
+
+        /* حالة الفتح */
+        .open .lid { transform: translateY(-150px) rotate(-20deg); opacity: 0; }
+        .open .card { opacity: 1; visibility: visible; transform: translate(-50%, -200px); }
+        .open .gift-box { background: #ffb3c1; transform: scale(0.9); }
+
+        .instruction {
+            position: absolute;
+            bottom: -60px;
+            width: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #c9184a;
+            font-weight: bold;
+            font-size: 14px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="giftWrapper">
+    <div class="card">
+        <h2 style="margin:0;">Happy Birthday, Gorgeous! 🌸</h2>
+        <p style="margin:15px 0;">You finally caught it! ✨<br>Wishing you the best day ever, Israa!</p>
+        <p style="font-size: 13px; color: #ff85a1;">May your year be full of love & success! 💖</p>
+    </div>
+    <div class="lid"></div>
+    <div class="gift-box"></div>
+    <div class="instruction">Tap to catch your gift! 🎁</div>
+</div>
+
+<script>
+    const gift = document.getElementById('giftWrapper');
+    let moveCount = 0;
+    const maxMoves = 3; // تهرب 3 مرات وبعد تتحل
+
+    function handleInteraction(e) {
+        // منع التلفون من تحريك الصفحة وقت اللعب
+        if (e.cancelable) e.preventDefault();
+
+        if (moveCount < maxMoves) {
+            // حساب حدود الشاشة باش الهدية ما تخرجش لبرة
+            const padding = 60;
+            const maxX = (window.innerWidth / 2) - padding;
+            const maxY = (window.innerHeight / 2) - padding;
+            
+            const randomX = (Math.random() - 0.5) * (maxX * 2);
+            const randomY = (Math.random() - 0.5) * (maxY * 2);
+            
+            gift.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            moveCount++;
+        } else {
+            // الهدية ترجع للمركز وتتحل
+            gift.style.transform = `translate(0, 0)`;
+            gift.classList.add('open');
+        }
+    }
+
+    // دعم اللمس (Touch) والنقر (Click) في نفس الوقت
+    gift.addEventListener('touchstart', handleInteraction, { passive: false });
+    gift.addEventListener('click', handleInteraction);
+</script>
+
+</body>
+</html>
